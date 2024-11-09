@@ -52,6 +52,8 @@ fun SelectOptionScreen(
     subtotal: String,
     options: List<String>,
     onSelectionChanged: (String) -> Unit = {},
+    onCancelButtonClicked: () -> Unit = {},  // Modificación: Se agrega este parámetro para cancelar.
+    onNextButtonClicked: () -> Unit = {},    // Modificación: Se agrega este parámetro para continuar.
     modifier: Modifier = Modifier
 ) {
     var selectedValue by rememberSaveable { mutableStateOf("") }
@@ -105,7 +107,7 @@ fun SelectOptionScreen(
         ) {
             OutlinedButton(
                 modifier = Modifier.weight(1f),
-                onClick = {}
+                onClick = onCancelButtonClicked  // Modificación: Se pasa la función para cancelar.
             ) {
                 Text(stringResource(R.string.cancel))
             }
@@ -113,7 +115,7 @@ fun SelectOptionScreen(
                 modifier = Modifier.weight(1f),
                 // the button is enabled when the user makes a selection
                 enabled = selectedValue.isNotEmpty(),
-                onClick = {}
+                onClick = onNextButtonClicked  // Modificación: Se pasa la función para continuar.
             ) {
                 Text(stringResource(R.string.next))
             }
