@@ -48,6 +48,8 @@ import com.example.cupcake.ui.theme.CupcakeTheme
 @Composable
 fun OrderSummaryScreen(
     orderUiState: OrderUiState,
+    onCancelButtonClicked: () -> Unit,  // Modificación: Se agrega este parámetro para cancelar.
+    onSendButtonClicked: (String, String) -> Unit,  // Modificación: Se agrega este parámetro para enviar.
     modifier: Modifier = Modifier
 ) {
     val resources = LocalContext.current.resources
@@ -103,13 +105,13 @@ fun OrderSummaryScreen(
             ) {
                 Button(
                     modifier = Modifier.fillMaxWidth(),
-                    onClick = {}
+                    onClick = { onSendButtonClicked(newOrder, orderSummary) }  // Modificación: Se pasa la función para enviar.
                 ) {
                     Text(stringResource(R.string.send))
                 }
                 OutlinedButton(
                     modifier = Modifier.fillMaxWidth(),
-                    onClick = {}
+                    onClick = onCancelButtonClicked  // Modificación: Se pasa la función para cancelar.
                 ) {
                     Text(stringResource(R.string.cancel))
                 }
@@ -124,7 +126,10 @@ fun OrderSummaryPreview() {
     CupcakeTheme {
         OrderSummaryScreen(
             orderUiState = OrderUiState(0, "Test", "Test", "$300.00"),
+            onCancelButtonClicked = {},  // Modificación: Agregar un callback vacío para cancelar.
+            onSendButtonClicked = { _, _ -> },  // Modificación: Agregar un callback vacío para enviar.
             modifier = Modifier.fillMaxHeight()
         )
     }
 }
+
