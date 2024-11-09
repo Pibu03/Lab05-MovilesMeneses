@@ -165,9 +165,11 @@ fun CupcakeApp(
     }
 }
 
-fun cancelOrderAndNavigateToStart(viewModel: OrderViewModel, navController: NavHostController) {
-    viewModel.resetOrder() // Reseteamos el pedido en el ViewModel
-    navController.navigate(CupcakeScreen.Start.name) {
-        popUpTo(CupcakeScreen.Start.name) { inclusive = true }
-    }
+// Función para cancelar el pedido y navegar de regreso a la pantalla de inicio
+private fun cancelOrderAndNavigateToStart(
+    viewModel: OrderViewModel,  // ViewModel para manejar el estado de la orden
+    navController: NavHostController // Controlador de navegación para gestionar la pila de actividades
+) {
+    viewModel.resetOrder() // Resetea el estado de la orden en el ViewModel
+    navController.popBackStack(CupcakeScreen.Start.name, inclusive = false) // Navega de regreso a la pantalla de inicio
 }
