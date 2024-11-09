@@ -104,11 +104,15 @@ fun CupcakeApp(
             composable(route = CupcakeScreen.Start.name) {
                 StartOrderScreen(
                     quantityOptions = DataSource.quantityOptions,
+                    onNextButtonClicked = { selectedQuantity ->
+                        navController.navigate(CupcakeScreen.Flavor.name)
+                    },
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(dimensionResource(R.dimen.padding_medium))
                 )
             }
+
             composable(route = CupcakeScreen.Flavor.name) {
                 val context = LocalContext.current
                 SelectOptionScreen(
