@@ -15,6 +15,7 @@
  */
 package com.example.cupcake.ui
 
+import android.content.Intent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -53,6 +54,7 @@ fun OrderSummaryScreen(
     modifier: Modifier = Modifier
 ) {
     val resources = LocalContext.current.resources
+    val context = LocalContext.current
 
     val numberOfCupcakes = resources.getQuantityString(
         R.plurals.cupcakes,
@@ -68,15 +70,15 @@ fun OrderSummaryScreen(
         orderUiState.quantity
     )
     val newOrder = stringResource(R.string.new_cupcake_order)
-    //Create a list of order summary to display
-    val items = listOf(
-        // Summary line 1: display selected quantity
-        Pair(stringResource(R.string.quantity), numberOfCupcakes),
-        // Summary line 2: display selected flavor
-        Pair(stringResource(R.string.flavor), orderUiState.flavor),
-        // Summary line 3: display selected pickup date
-        Pair(stringResource(R.string.pickup_date), orderUiState.date)
-    )
+
+    // Creación del Intent para compartir los detalles del pedido
+    val sendIntent = Intent().apply {
+        action = Intent.ACTION_SEND
+        putExtra(Intent.EXTRA_SUBJECT, newOrder)
+        putExtra(Intent.EXTRA_TEXT, orderSummary)
+        type = "text/plain"
+    }
+    val shareIntent = Intent.createChooser(sendIntent, null)
 
     Column(
         modifier = modifier,
@@ -86,6 +88,14 @@ fun OrderSummaryScreen(
             modifier = Modifier.padding(dimensionResource(R.dimen.padding_medium)),
             verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_small))
         ) {
+            val items = listOf(
+                // Summary line 1: display selected quantity
+                Pair(stringResource(R.string.quantity), numberOfCupcakes),
+                // Summary line 2: display selected flavor
+                Pair(stringResource(R.string.flavor), orderUiState.flavor),
+                // Summary line 3: display selected pickup date
+                Pair(stringResource(R.string.pickup_date), orderUiState.date)
+            )
             items.forEach { item ->
                 Text(item.first.uppercase())
                 Text(text = item.second, fontWeight = FontWeight.Bold)
@@ -105,7 +115,9 @@ fun OrderSummaryScreen(
             ) {
                 Button(
                     modifier = Modifier.fillMaxWidth(),
-                    onClick = { onSendButtonClicked(newOrder, orderSummary) }  // Modificación: Se pasa la función para enviar.
+                    onClick = {
+                        context.startActivity(shareIntent) // Abre el ShareSheet
+                    }
                 ) {
                     Text(stringResource(R.string.send))
                 }
@@ -132,4 +144,3 @@ fun OrderSummaryPreview() {
         )
     }
 }
-
